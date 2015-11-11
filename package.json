@@ -1,0 +1,22 @@
+{
+  "name": "@sitepack/prerender",
+  "version": "0.1.0",
+  "description": "Prerender task for sitepack apps.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sitepack/sitepack-prerender.git"
+  },
+  "keywords": [
+    "sitepack"
+  ],
+  "author": "Jas Chen",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sitepack/sitepack-prerender/issues"
+  },
+  "homepage": "https://github.com/sitepack/sitepack-prerender#readme"
+}
