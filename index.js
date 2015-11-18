@@ -10,7 +10,10 @@ const assetsPath = path.join(distPath, assets);
 
 const routes = require(path.join(process.cwd(), 'config', 'route.js'));
 const renderHtml = require(path.join(process.cwd(), 'base', 'html.js'));
-const renderLayout = require(path.join(assetsPath, 'layout.js'));
+let renderLayout = require(path.join(assetsPath, 'layout.js'));
+if (renderLayout.__esModule) {
+  renderLayout = renderLayout['default'];
+}
 
 function fileExist(file) {
   let exist = true;
@@ -30,7 +33,11 @@ const layoutCssExist = fileExist(path.join(assetsPath, 'layout.css'));
 const layoutCssTag = `<link rel="stylesheet" href="/${assets}/layout.css">`;
 
 function renderRoute(route) {
-  const page = require(path.join(assetsPath, `${route.name}.js`));
+  let page = require(path.join(assetsPath, `${route.name}.js`));
+  if (page.__esModule) {
+    page = page['default'];
+  }
+
   const pageHtml = page.render(route);
 
   if (!pageHtml) {

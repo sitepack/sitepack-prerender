@@ -1,6 +1,6 @@
 {
   "name": "@sitepack/prerender",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Prerender task for sitepack apps.",
   "main": "index.js",
   "scripts": {
