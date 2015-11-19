@@ -11,6 +11,7 @@ const assetsPath = path.join(distPath, assets);
 const routes = require(path.join(process.cwd(), 'config', 'route.js'));
 const renderHtml = require(path.join(process.cwd(), 'base', 'html.js'));
 let renderLayout = require(path.join(assetsPath, 'layout.js'));
+
 if (renderLayout.__esModule) {
   renderLayout = renderLayout['default'];
 }
@@ -28,9 +29,9 @@ function fileExist(file) {
   return exist;
 }
 
-const mainScript = `<script src="/${assets}/main.js"></script>`;
+const scriptSrcs = [ `/${assets}/main.js` ];
 const layoutCssExist = fileExist(path.join(assetsPath, 'layout.css'));
-const layoutCssTag = `<link rel="stylesheet" href="/${assets}/layout.css">`;
+
 
 function renderRoute(route) {
   let page = require(path.join(assetsPath, `${route.name}.js`));
@@ -44,30 +45,41 @@ function renderRoute(route) {
     return null;
   }
 
-  const latout = renderLayout(pageHtml);
+  const content = renderLayout(pageHtml);
 
-  let cssTags = '';
+  const csshrefs = [];
   if (layoutCssExist) {
-    cssTags += layoutCssTag;
+    csshrefs.push(`/${assets}/layout.css`);
   }
 
   if (fileExist(path.join(assetsPath, `${route.name}.css`))) {
-    cssTags += `<link rel="stylesheet" href="/${assets}/${route.name}.css">`;
+    csshrefs.push(`/${assets}/${route.name}.css`);
   }
 
-  const html = renderHtml(route.title, latout + mainScript)
-    .replace('</head>', `${cssTags}</head>`);
+  const html = renderHtml(
+    route.title,
+    content,
+    csshrefs,
+    scriptSrcs
+  );
 
   return html;
 }
 
 function render404() {
-  const latout = renderLayout('');
-  let html = renderHtml(null, latout + mainScript);
+  const content = renderLayout('');
 
+  const cssHrefs = [];
   if (layoutCssExist) {
-    html = html.replace('</head>', `${layoutCssTag}</head>`);
+    cssHrefs.push(`/${assets}/layout.css`);
   }
+
+  const html = renderHtml(
+    null,
+    content,
+    cssHrefs,
+    scriptSrcs
+  );
 
   return html;
 }
@@ -79,7 +91,14 @@ function write(fileName, content) {
   });
 }
 
-routes.forEach(function(route) {
+
+// prerender each route
+routes.forEach((route) => {
+  if (route.skipPrerender) {
+    console.log(`[Skip] ${route.name}`);
+    return;
+  }
+
   const html = renderRoute(route);
   if (html) {
     const filePath = path.join(distPath, route.path);
@@ -95,4 +114,6 @@ routes.forEach(function(route) {
 
 });
 
+
+// generate 404.html
 write(path.join(distPath, '404.html'), render404());
