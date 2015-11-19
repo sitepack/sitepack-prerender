@@ -57,7 +57,7 @@ function renderRoute(route) {
   }
 
   const html = renderHtml(
-    route.title,
+    route.path,
     content,
     csshrefs,
     scriptSrcs
