@@ -16,6 +16,8 @@ if (prerender.__esModule) {
   prerender = prerender['default'];
 }
 
+prerender = prerender(global);
+
 function fileExist(file) {
   let exist = true;
   try {
