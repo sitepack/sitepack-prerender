@@ -45,7 +45,8 @@ if (renderCssExist) {
 }
 
 function renderRoute(route) {
-  let routeComponent = require(path.join(assetsPath, `${route.name}.js`));
+  const modulePath = path.join(assetsPath, `${route.name}.js`);
+  let routeComponent = require(modulePath);
   if (routeComponent.__esModule) {
     routeComponent = routeComponent['default'];
   }
@@ -67,6 +68,8 @@ function renderRoute(route) {
     csshrefs,
     scriptSrcs
   );
+
+  fs.unlinkSync(modulePath);
 
   return html;
 }
